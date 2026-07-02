@@ -82,6 +82,51 @@ Prepare:
 
 Inspector screenshots are recommended if you use MCP Inspector.
 
+## Implementation Setup
+
+This repository includes a working implementation in `implementation/`.
+
+```bash
+# from repository root
+uv venv .venv
+uv pip install --python .venv/bin/python -r requirements.txt
+
+# initialize SQLite data (also runs automatically on first server start)
+.venv/bin/python implementation/init_db.py
+
+# run repeatable verification
+.venv/bin/python implementation/verify_server.py
+
+# run automated tests
+.venv/bin/pytest implementation/tests/test_server.py -q
+
+# start MCP Inspector
+./implementation/start_inspector.sh
+```
+
+### MCP client example (Gemini CLI)
+
+```bash
+gemini mcp add sqlite-lab "$(pwd)/.venv/bin/python" "$(pwd)/implementation/mcp_server.py" \
+  --description "SQLite lab FastMCP server" --timeout 10000
+gemini mcp list
+```
+
+### Tool summary
+
+| Tool | Purpose |
+|------|---------|
+| `search` | Filter, sort, and paginate rows |
+| `insert` | Insert a validated row |
+| `aggregate` | `count`, `avg`, `sum`, `min`, `max` with optional `group_by` |
+
+### Resource URIs
+
+- `schema://database` — full schema snapshot
+- `schema://table/{table_name}` — single-table schema
+
+Filter operators supported by `search` and `aggregate`: `eq`, `ne`, `gt`, `gte`, `lt`, `lte`, `like`, `in`.
+
 ## Suggested Project Structure
 
 ```text
